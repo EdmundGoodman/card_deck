@@ -24,6 +24,7 @@ class Faces(Enum):
     KING = 13
 
 
+
 class CardFromTypeableName:
     SUIT_LOOKUP = {s.name[0]:s for s in Suits}
     FACE_LOOKUP = {str(f.value):f for f in Faces if f not in [1,10,11,12]}
@@ -33,11 +34,20 @@ class CardFromTypeableName:
     FACE_LOOKUP["K"] = Faces.KING
 
     def __init__(self, typeableName):
-        face = CardFromLetter.FACE_LOOKUP[typeableName[0]]
-        suit = CardFromLetter.SUIT_LOOKUP[typeableName[1]]
-        card = Card(suit, face)
-        self.__class__ = card.__class__
-        self.__dict__ = card.__dict__
+        faceChar, suitChar = typeableName[0], typeableName[1]
+        face, suit = None, None
+
+        if faceChar in CardFromTypeableName.FACE_LOOKUP:
+            face = CardFromTypeableName.FACE_LOOKUP[faceChar]
+        if suitChar in CardFromTypeableName.SUIT_LOOKUP:
+            suit = CardFromTypeableName.SUIT_LOOKUP[suitChar]
+
+        if len(typeableName) == 2 and face is not None and suit is not None:
+            card = Card(suit, face)
+            self.__class__ = card.__class__
+            self.__dict__ = card.__dict__
+        else:
+            raise ValueError("CardFromTypeableName requires a valid typeable name")
 
 
 
@@ -183,9 +193,15 @@ if __name__=="__main__":
 
     print(Card(Suits.SPADES, Faces.SIX).getTypeableName())
 
-    #while True:
-    #    inp = str(input("Enter the typeable name of a card: "))
-    print(type(CardFromLetter("AH")))
+    print(type(CardFromTypeableName("AH")))
+    while True:
+        inp = str(input("Enter the typeable name of a card: "))
+        try:
+            card = CardFromTypeableName(inp)
+            break
+        except ValueError as e:
+            print(e)
+    print(card)
 
 
     d1 = Deck()
