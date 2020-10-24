@@ -148,3 +148,23 @@ class Deck(Pile):
         for suit in Suits:
             for face in Faces:
                 self.cards.append(Card(suit, face))
+
+
+
+if __name__=="__main__":
+    """Test the interfaces of the objects"""
+
+    d1 = Deck()
+    d2 = Pile([Card(Suits.DIAMONDS, Faces.ACE)])
+    d3 = Pile([
+        Card(Suits.DIAMONDS, Faces.ACE),
+        Card(Suits.CLUBS, Faces.FIVE),
+    ])
+
+    print(d1)
+    print(d2)
+    print(d1-d2)
+    print(d1 and d3)
+    print(d1 is copy.deepcopy(d1))
+    print(hash(d1))
+    print(hash(d2))
