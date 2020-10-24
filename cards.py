@@ -1,14 +1,14 @@
-import enum
+from enum import Enum, unique
 
-
-class Suits(enum.Enum):
+@unique
+class Suits(Enum):
     DIAMONDS = 1
     CLUBS = 2
     HEARTS = 3
     SPADES = 4
 
-
-class Faces(enum.Enum):
+@unique
+class Faces(Enum):
     ACE = 1
     TWO = 2
     THREE = 3
@@ -35,6 +35,16 @@ class Card:
 
     def getFace(self):
         return self.face
+
+    def getTypeableName(self):
+        suitChar = self.suit.name[0]
+        faceNum = self.face.value
+        #If it's a picture card, use it's first letter to denote it
+        if faceNum in [1,11,12,13]:
+            faceChar = self.face.name[0]
+        else:
+            faceChar = str(faceNum)
+        return faceChar + suitChar
 
     def __eq__(self, other):
         return self.suit == other.suit and self.face == other.face
@@ -153,6 +163,9 @@ class Deck(Pile):
 
 if __name__=="__main__":
     """Test the interfaces of the objects"""
+    import copy
+
+    print(Card(Suits.CLUBS, Faces.FIVE).getTypeableName())
 
     d1 = Deck()
     d2 = Pile([Card(Suits.DIAMONDS, Faces.ACE)])
