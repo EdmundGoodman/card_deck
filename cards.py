@@ -139,3 +139,12 @@ class Pile:
 
     def __repr__(self):
         return str(self)
+
+
+
+class Deck(Pile):
+    def __init__(self):
+        Pile.__init__(self)
+        for suit in Suits:
+            for face in Faces:
+                self.cards.append(Card(suit, face))
