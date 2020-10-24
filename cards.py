@@ -70,3 +70,72 @@ class Card:
 
     def __repr__(self):
         return str(self)
+
+
+
+class Pile:
+    def __init__(self, cards=[]):
+        self.cards = cards
+
+    def get(self):
+        return self.cards
+
+    def pop(self, position=None):
+        if position is None:
+            position = len(self.cards) - 1
+        return self.cards.pop()
+
+    def peek(self, position=-1):
+        return self.cards[position]
+
+    def place(self, card, position=None):
+        if position is None:
+            position = len(self.cards)
+        self.cards.insert(position, card)
+
+    def shuffle(self):
+        random.shuffle(self.cards)
+
+    def deal(self, numSets, numCards):
+        sets = [[] for n in range(numSets)]
+        for i in range(numCards):
+            for j in range(numSets):
+                sets[j].append(self.pop())
+        return sets
+
+    def __add__(self, other):
+        return Pile( self.cards.extend(other.cards) )
+
+    def __sub__(self, other):
+        return Pile( [item for item in self if item not in other] )
+
+    def __iter__(self):
+        for card in self.cards:
+            yield card
+
+    def __contains__(self, item):
+        return item in self.get()
+
+    def __len__(self):
+        return len(self.cards)
+
+    def __and__(self, other):
+        return [item for item in self.cards if item in other.cards]
+
+    def __or__(self, other):
+        return list( set(self.cards).union(set(other.cards)) )
+
+    def __eq__(self, other):
+        return self.cards == other.cards
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __hash__(self):
+        return int("".join([str(hash(x)) for x in self.cards]))
+
+    def __str__(self):
+        return ", ".join([str(x) for x in self.cards])
+
+    def __repr__(self):
+        return str(self)
