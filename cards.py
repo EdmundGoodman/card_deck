@@ -24,6 +24,22 @@ class Faces(Enum):
     KING = 13
 
 
+class CardFromTypeableName:
+    SUIT_LOOKUP = {s.name[0]:s for s in Suits}
+    FACE_LOOKUP = {str(f.value):f for f in Faces if f not in [1,10,11,12]}
+    FACE_LOOKUP["A"] = Faces.ACE
+    FACE_LOOKUP["J"] = Faces.JACK
+    FACE_LOOKUP["Q"] = Faces.QUEEN
+    FACE_LOOKUP["K"] = Faces.KING
+
+    def __init__(self, typeableName):
+        face = CardFromLetter.FACE_LOOKUP[typeableName[0]]
+        suit = CardFromLetter.SUIT_LOOKUP[typeableName[1]]
+        card = Card(suit, face)
+        self.__class__ = card.__class__
+        self.__dict__ = card.__dict__
+
+
 
 class Card:
     def __init__(self, suit, face):
@@ -165,12 +181,17 @@ if __name__=="__main__":
     """Test the interfaces of the objects"""
     import copy
 
-    print(Card(Suits.CLUBS, Faces.FIVE).getTypeableName())
+    print(Card(Suits.SPADES, Faces.SIX).getTypeableName())
+
+    #while True:
+    #    inp = str(input("Enter the typeable name of a card: "))
+    print(type(CardFromLetter("AH")))
+
 
     d1 = Deck()
     d2 = Pile([Card(Suits.DIAMONDS, Faces.ACE)])
     d3 = Pile([
-        Card(Suits.DIAMONDS, Faces.ACE),
+        Card(Suits.HEARTS, Faces.ACE),
         Card(Suits.CLUBS, Faces.FIVE),
     ])
 
