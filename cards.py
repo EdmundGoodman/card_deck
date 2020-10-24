@@ -25,46 +25,20 @@ class Faces(Enum):
 
 
 
-class CardFromTypeableName:
-    SUIT_LOOKUP = {s.name[0]:s for s in Suits}
-    FACE_LOOKUP = {str(f.value):f for f in Faces if f not in [1,10,11,12]}
-    FACE_LOOKUP["A"] = Faces.ACE
-    FACE_LOOKUP["J"] = Faces.JACK
-    FACE_LOOKUP["Q"] = Faces.QUEEN
-    FACE_LOOKUP["K"] = Faces.KING
-
-    def __init__(self, typeableName):
-        faceChar, suitChar = typeableName[0], typeableName[1]
-        face, suit = None, None
-
-        if faceChar in CardFromTypeableName.FACE_LOOKUP:
-            face = CardFromTypeableName.FACE_LOOKUP[faceChar]
-        if suitChar in CardFromTypeableName.SUIT_LOOKUP:
-            suit = CardFromTypeableName.SUIT_LOOKUP[suitChar]
-
-        if len(typeableName) == 2 and face is not None and suit is not None:
-            card = Card(suit, face)
-            self.__class__ = card.__class__
-            self.__dict__ = card.__dict__
-        else:
-            raise ValueError("CardFromTypeableName requires a valid typeable name")
-
-
-
 class Card:
-    def __init__(self, suit, face):
-        self.suit = suit
+    def __init__(self, face, suit):
         self.face = face
-
-    def getSuit(self):
-        return self.suit
+        self.suit = suit
 
     def getFace(self):
         return self.face
 
+    def getSuit(self):
+        return self.suit
+
     def getTypeableName(self):
-        suitChar = self.suit.name[0]
         faceNum = self.face.value
+        suitChar = self.suit.name[0]
         #If it's a picture card, use it's first letter to denote it
         if faceNum in [1,11,12,13]:
             faceChar = self.face.name[0]
@@ -73,7 +47,7 @@ class Card:
         return faceChar + suitChar
 
     def __eq__(self, other):
-        return self.suit == other.suit and self.face == other.face
+        return self.face == other.face and self.suit == other.suit
 
     def __ne__(self, other):
         return self == other
@@ -97,7 +71,7 @@ class Card:
         return self > other or self == other
 
     def __hash__(self):
-        return int(str(self.suit.value)+str(self.face.value))
+        return int(str(self.face.value)+str(self.suit.value))
 
     def __str__(self):
         faceChars = "A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")
@@ -106,6 +80,32 @@ class Card:
 
     def __repr__(self):
         return str(self)
+
+
+
+class CardFromTypeableName:
+    SUIT_LOOKUP = {s.name[0]:s for s in Suits}
+    FACE_LOOKUP = {str(f.value):f for f in Faces if f not in [1,10,11,12]}
+    FACE_LOOKUP["A"] = Faces.ACE
+    FACE_LOOKUP["J"] = Faces.JACK
+    FACE_LOOKUP["Q"] = Faces.QUEEN
+    FACE_LOOKUP["K"] = Faces.KING
+
+    def __init__(self, typeableName):
+        faceChar, suitChar = typeableName[0], typeableName[1]
+        face, suit = None, None
+
+        if faceChar in CardFromTypeableName.FACE_LOOKUP:
+            face = CardFromTypeableName.FACE_LOOKUP[faceChar]
+        if suitChar in CardFromTypeableName.SUIT_LOOKUP:
+            suit = CardFromTypeableName.SUIT_LOOKUP[suitChar]
+
+        if len(typeableName) == 2 and face is not None and suit is not None:
+            card = Card(face, suit)
+            self.__class__ = card.__class__
+            self.__dict__ = card.__dict__
+        else:
+            raise ValueError("CardFromTypeableName requires a valid typeable name")
 
 
 
@@ -183,7 +183,7 @@ class Deck(Pile):
         Pile.__init__(self)
         for suit in Suits:
             for face in Faces:
-                self.cards.append(Card(suit, face))
+                self.cards.append(Card(face, suit))
 
 
 
@@ -191,7 +191,7 @@ if __name__=="__main__":
     """Test the interfaces of the objects"""
     import copy
 
-    print(Card(Suits.SPADES, Faces.SIX).getTypeableName())
+    print(Card(Faces.SIX, Suits.SPADES).getTypeableName())
 
     print(type(CardFromTypeableName("AH")))
     while True:
@@ -205,10 +205,10 @@ if __name__=="__main__":
 
 
     d1 = Deck()
-    d2 = Pile([Card(Suits.DIAMONDS, Faces.ACE)])
+    d2 = Pile([Card(Faces.ACE, Suits.DIAMONDS)])
     d3 = Pile([
-        Card(Suits.HEARTS, Faces.ACE),
-        Card(Suits.CLUBS, Faces.FIVE),
+        Card(Faces.ACE, Suits.HEARTS),
+        Card(Faces.FIVE, Suits.CLUBS),
     ])
 
     print(d1)
