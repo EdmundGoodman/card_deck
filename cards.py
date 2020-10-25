@@ -47,6 +47,19 @@ class Faces(Enum):
     KING = 13
 
 
+class CardLookupData:
+    """Utility class storing data to lookup how to print cards, and
+    accept them as typeable characters"""
+    FACE_TYPEABLE_LOOKUP = {str(f.value):f for f in Faces
+                            if f.value not in [1,11,12,13]}
+    FACE_TYPEABLE_LOOKUP.update({str(f.name)[0]:f for f in Faces
+                                if f.value in [1,11,12,13]})
+    SUIT_TYPEABLE_LOOKUP = {s.name[0]:s for s in Suits}
+
+    FACE_CHAR_LOOKUP = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i] for i,f in enumerate(Faces)}
+    SUIT_CHAR_LOOKUP = {f:'♦,♣,♥,♠'.split(",")[i] for i,f in enumerate(Suits)}
+
+
 
 class Card:
     """A model of a card as having a suit and a face, a printeable and a
@@ -135,9 +148,9 @@ class Card:
     def __str__(self):
         """Get a string representing the card, using UTF-8 characters to
         prettily denote the suit"""
-        faceChars = "A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")
-        suitChars = '♦,♣,♥,♠'.split(",")
-        return faceChars[self._face.value-1] + suitChars[self._suit.value-1]
+        faceStr = CardLookupData.FACE_CHAR_LOOKUP[self._face]
+        suitStr = CardLookupData.SUIT_CHAR_LOOKUP[self._suit]
+        return faceStr + suitStr
 
     def __repr__(self):
         """Use the string representation of the card as the informal
@@ -149,13 +162,6 @@ class Card:
 class CardFromTypeableName:
     """A utility class to generate a Card object from its typeable name,
     to streamline data entry of cards via a text format"""
-    SUIT_LOOKUP = {s.name[0]:s for s in Suits}
-    FACE_LOOKUP = {str(f.value):f for f in Faces if f not in [1,10,11,12]}
-    #If it's a picture card, use it's first letter to denote it
-    FACE_LOOKUP["A"] = Faces.ACE
-    FACE_LOOKUP["J"] = Faces.JACK
-    FACE_LOOKUP["Q"] = Faces.QUEEN
-    FACE_LOOKUP["K"] = Faces.KING
 
     def getCard(self, typeableName):
         """Return the Card object specified by the typeable name. If the name
@@ -163,10 +169,10 @@ class CardFromTypeableName:
         faceChar, suitChar = typeableName[0], typeableName[1]
         face, suit = None, None
 
-        if faceChar in CardFromTypeableName.FACE_LOOKUP:
-            face = CardFromTypeableName.FACE_LOOKUP[faceChar]
-        if suitChar in CardFromTypeableName.SUIT_LOOKUP:
-            suit = CardFromTypeableName.SUIT_LOOKUP[suitChar]
+        if faceChar in CardLookupData.FACE_TYPEABLE_LOOKUP:
+            face = CardLookupData.FACE_TYPEABLE_LOOKUP[faceChar]
+        if suitChar in CardLookupData.SUIT_TYPEABLE_LOOKUP:
+            suit = CardLookupData.SUIT_TYPEABLE_LOOKUP[suitChar]
 
         if len(typeableName) == 2 and face is not None and suit is not None:
             return Card(face, suit)
