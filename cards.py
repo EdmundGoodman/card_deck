@@ -54,16 +54,28 @@ class Card:
 
     def __init__(self, face, suit):
         """Initialise the card as having a face and a suit"""
-        self.face = face
-        self.suit = suit
+        self._face = face
+        self._suit = suit
 
-    def getFace(self):
+    @property
+    def face(self):
         """Get the face of the card"""
-        return self.face
+        return self._face
 
-    def getSuit(self):
+    @face.setter
+    def face(self):
+        """Raise an error on trying to change the face of a card"""
+        raise ValueError("'Card.face' property does not support assignment")
+
+    @property
+    def suit(self):
         """Get the suit of the card"""
-        return self.suit
+        return self._suit
+
+    @suit.setter
+    def suit(self):
+        """Raise an error on trying to change the face of a card"""
+        raise ValueError("'Card.suit' property does not support assignment")
 
     def getTypeableName(self):
         """Get the typeable name of the card, i.e. a unique string to describe
@@ -74,17 +86,17 @@ class Card:
         the suit, as the first letter of the suit name.
         For example, the ace of hearts would be 'AH', whereas the five of clubs
         would be '5C'"""
-        faceNum = self.face.value
-        suitChar = self.suit.name[0]
+        faceNum = self._face.value
+        suitChar = self._suit.name[0]
         if faceNum in [1,11,12,13]:
-            faceChar = self.face.name[0]
+            faceChar = self._face.name[0]
         else:
             faceChar = str(faceNum)
         return faceChar + suitChar
 
     def __eq__(self, other):
         """Return the equality between two cards"""
-        return self.face == other.face and self.suit == other.suit
+        return self._face == other.face and self._suit == other.suit
 
     def __ne__(self, other):
         """Return the inequality between two cards"""
@@ -93,10 +105,10 @@ class Card:
     def __lt__(self, other):
         """Return whether the card has a lower value than another card, first
         by comparing faces, then if they are equal by comparing suits"""
-        if self.face < other.face:
+        if self._face < other.face:
             return True
         else:
-            return self.suit < other.suit
+            return self._suit < other.suit
 
     def __le__(self, other):
         """Return whether the card has a lower or equal value than another card,
@@ -106,10 +118,10 @@ class Card:
     def __gt__(self, other):
         """Return whether the card has a greater value than another card, first
         by comparing faces, then if they are equal by comparing suits"""
-        if self.face > other.face:
+        if self._face > other.face:
             return True
         else:
-            return self.suit > other.suit
+            return self._suit > other.suit
 
     def __ge__(self, other):
         """Return whether the card has a greater or equal value than another card,
@@ -118,14 +130,14 @@ class Card:
 
     def __hash__(self):
         """Generate a unique integer representation of the card"""
-        return hash(str(self.face.value)+str(self.suit.value))
+        return hash(str(self._face.value)+str(self._suit.value))
 
     def __str__(self):
         """Get a string representing the card, using UTF-8 characters to
         prettily denote the suit"""
         faceChars = "A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")
         suitChars = '♦,♣,♥,♠'.split(",")
-        return faceChars[self.face.value-1] + suitChars[self.suit.value-1]
+        return faceChars[self._face.value-1] + suitChars[self._suit.value-1]
 
     def __repr__(self):
         """Use the string representation of the card as the informal
@@ -170,34 +182,41 @@ class Pile:
     def __init__(self, cards=[]):
         """Initialise the pile by default as empty, or with a specified list
         of initial cards"""
-        self.cards = cards
+        self._cards = cards
 
-    def get(self):
+    @property
+    def cards(self):
         """Get the list of cards in the pile"""
-        return self.cards
+        return self._cards
+
+    @cards.setter
+    def cards(self, cards):
+        """Set the list of cards in the pile"""
+        self._cards = cards
+
 
     def pop(self, position=None):
         """Pop a card off the pile, by default from the top, or at a specified
         position in the pile"""
         if position is None:
-            position = len(self.cards) - 1
-        return self.cards.pop()
+            position = len(self._cards) - 1
+        return self._cards.pop()
 
     def peek(self, position=-1):
         """Peek at the value of a card in the pile, by default the top card, or
         at a specified position in the pile"""
-        return self.cards[position]
+        return self._cards[position]
 
     def place(self, card, position=None):
         """Place a card into the pile, by default to the top, or at a specified
         position in the pile"""
         if position is None:
-            position = len(self.cards)
-        self.cards.insert(position, card)
+            position = len(self._cards)
+        self._cards.insert(position, card)
 
     def shuffle(self):
         """Randomly shuffle the order of the cards in the pile"""
-        random.shuffle(self.cards)
+        random.shuffle(self._cards)
 
     def deal(self, numSets, numCards):
         """Deal cards from the pile into a specified number of new piles,
@@ -216,7 +235,7 @@ class Pile:
 
     def __add__(self, other):
         """Concatenate a pile to the end of the current pile"""
-        return Pile(self.cards.extend(other.cards))
+        return Pile(self._cards.extend(other.cards))
 
     def __sub__(self, other):
         """Remove all cards from the current pile that are in the other pile
@@ -225,29 +244,29 @@ class Pile:
 
     def __iter__(self):
         """Create an iterator for the pile of cards"""
-        for card in self.cards:
+        for card in self._cards:
             yield card
 
     def __contains__(self, item):
         """Return whether the pile contains a specified card"""
-        return item in self.get()
+        return item in self._cards
 
     def __len__(self):
         """Get the size of the pile"""
-        return len(self.cards)
+        return len(self._cards)
 
     def __and__(self, other):
         """Return the intersection of the current and another pile of cards"""
-        return Pile([item for item in self.cards if item in other.cards])
+        return Pile([item for item in self._cards if item in other.cards])
 
     def __or__(self, other):
         """Return the union of the current and another pile of cards"""
-        return Pile(list(set(self.cards).union(set(other.cards))))
+        return Pile(list(set(self._cards).union(set(other.cards))))
 
     def __eq__(self, other):
         """Return whether two piles are equal (i.e. contain the same cards
         in the same order)"""
-        return self.cards == other.cards
+        return self._cards == other.cards
 
     def __ne__(self, other):
         """Return whether two piles are not equal (i.e. don't contain the same
@@ -256,12 +275,12 @@ class Pile:
 
     def __hash__(self):
         """Generate a unique integer representation of the pile"""
-        return hash("".join([str(hash(x)) for x in self.cards]))
+        return hash("".join([str(hash(x)) for x in self._cards]))
 
     def __str__(self):
         """Return a string representation of the pile, formatted as a list
         of the string representations of the cards it holds"""
-        return ", ".join([str(x) for x in self.cards])
+        return ", ".join([str(x) for x in self._cards])
 
     def __repr__(self):
         """Use the string representation of the pile as the informal
@@ -277,7 +296,7 @@ class Deck(Pile):
         Pile.__init__(self)
         for suit in Suits:
             for face in Faces:
-                self.cards.append(Card(face, suit))
+                self._cards.append(Card(face, suit))
 
 
 
