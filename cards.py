@@ -11,11 +11,12 @@ of suit and face, initially ordered by the enum values.
 """
 
 from enum import Enum, unique
+import random
 
 __author__ = "Edmund Goodman"
 __copyright__ = "Copyright 2020, Edmund Goodman"
 __credits__ = ["Edmund Goodman"]
-__license__ = "GPL"
+__license__ = "MIT"
 __maintainer__ = "Edmund Goodman"
 __email__ = "egoodman3141@gmail.com"
 
