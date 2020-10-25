@@ -118,7 +118,7 @@ class Card:
 
     def __hash__(self):
         """Generate a unique integer representation of the card"""
-        return int(str(self.face.value)+str(self.suit.value))
+        return hash(str(self.face.value)+str(self.suit.value))
 
     def __str__(self):
         """Get a string representing the card, using UTF-8 characters to
@@ -256,7 +256,7 @@ class Pile:
 
     def __hash__(self):
         """Generate a unique integer representation of the pile"""
-        return int("".join([str(hash(x)) for x in self.cards]))
+        return hash("".join([str(hash(x)) for x in self.cards]))
 
     def __str__(self):
         """Return a string representation of the pile, formatted as a list
@@ -311,5 +311,7 @@ if __name__=="__main__":
     print(d1-d2)
     print(d1 and d3)
     print(d1 is copy.deepcopy(d1))
+
+    #Test the hash functions of Pile objects
     print(hash(d1))
     print(hash(d2))
