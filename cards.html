@@ -37,6 +37,7 @@ of&nbsp;suit&nbsp;and&nbsp;face,&nbsp;initially&nbsp;ordered&nbsp;by&nbsp;the&nb
 <dl>
 <dt><font face="helvetica, arial"><a href="cards.html#Card">Card</a>
 </font></dt><dt><font face="helvetica, arial"><a href="cards.html#CardFromTypeableName">CardFromTypeableName</a>
+</font></dt><dt><font face="helvetica, arial"><a href="cards.html#CardLookupData">CardLookupData</a>
 </font></dt><dt><font face="helvetica, arial"><a href="cards.html#Pile">Pile</a>
 </font></dt><dd>
 <dl>
@@ -92,10 +93,6 @@ representation&nbsp;of&nbsp;the&nbsp;card</tt></dd></dl>
 <dl><dt><a name="Card-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Get&nbsp;a&nbsp;string&nbsp;representing&nbsp;the&nbsp;card,&nbsp;using&nbsp;UTF-8&nbsp;characters&nbsp;to<br>
 prettily&nbsp;denote&nbsp;the&nbsp;suit</tt></dd></dl>
 
-<dl><dt><a name="Card-getFace"><strong>getFace</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;face&nbsp;of&nbsp;the&nbsp;card</tt></dd></dl>
-
-<dl><dt><a name="Card-getSuit"><strong>getSuit</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;suit&nbsp;of&nbsp;the&nbsp;card</tt></dd></dl>
-
 <dl><dt><a name="Card-getTypeableName"><strong>getTypeableName</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;typeable&nbsp;name&nbsp;of&nbsp;the&nbsp;card,&nbsp;i.e.&nbsp;a&nbsp;unique&nbsp;string&nbsp;to&nbsp;describe<br>
 a&nbsp;card's&nbsp;value.<br>
 The&nbsp;first&nbsp;character&nbsp;of&nbsp;this&nbsp;string&nbsp;represents&nbsp;the&nbsp;face,&nbsp;as&nbsp;either&nbsp;the<br>
@@ -112,6 +109,12 @@ Data descriptors defined here:<br>
 </dl>
 <dl><dt><strong>__weakref__</strong></dt>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>face</strong></dt>
+<dd><tt>Get&nbsp;the&nbsp;face&nbsp;of&nbsp;the&nbsp;card</tt></dd>
+</dl>
+<dl><dt><strong>suit</strong></dt>
+<dd><tt>Get&nbsp;the&nbsp;suit&nbsp;of&nbsp;the&nbsp;card</tt></dd>
 </dl>
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -135,11 +138,32 @@ Data descriptors defined here:<br>
 <dl><dt><strong>__weakref__</strong></dt>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CardLookupData">class <strong>CardLookupData</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Utility&nbsp;class&nbsp;storing&nbsp;data&nbsp;to&nbsp;lookup&nbsp;how&nbsp;to&nbsp;print&nbsp;cards,&nbsp;and<br>
+accept&nbsp;them&nbsp;as&nbsp;typeable&nbsp;characters<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>FACE_LOOKUP</strong> = {'1': &lt;Faces.ACE: 1&gt;, '10': &lt;Faces.TEN: 10&gt;, '11': &lt;Faces.JACK: 11&gt;, '12': &lt;Faces.QUEEN: 12&gt;, '13': &lt;Faces.KING: 13&gt;, '2': &lt;Faces.TWO: 2&gt;, '3': &lt;Faces.THREE: 3&gt;, '4': &lt;Faces.FOUR: 4&gt;, '5': &lt;Faces.FIVE: 5&gt;, '6': &lt;Faces.SIX: 6&gt;, ...}</dl>
+<dl><dt><strong>FACE_CHAR_LOOKUP</strong> = {&lt;Faces.ACE: 1&gt;: 'A', &lt;Faces.TWO: 2&gt;: '2', &lt;Faces.THREE: 3&gt;: '3', &lt;Faces.FOUR: 4&gt;: '4', &lt;Faces.FIVE: 5&gt;: '5', &lt;Faces.SIX: 6&gt;: '6', &lt;Faces.SEVEN: 7&gt;: '7', &lt;Faces.EIGHT: 8&gt;: '8', &lt;Faces.NINE: 9&gt;: '9', &lt;Faces.TEN: 10&gt;: '10', ...}</dl>
 
-<dl><dt><strong>SUIT_LOOKUP</strong> = {'C': &lt;Suits.CLUBS: 2&gt;, 'D': &lt;Suits.DIAMONDS: 1&gt;, 'H': &lt;Suits.HEARTS: 3&gt;, 'S': &lt;Suits.SPADES: 4&gt;}</dl>
+<dl><dt><strong>FACE_TYPEABLE_LOOKUP</strong> = {'10': &lt;Faces.TEN: 10&gt;, '2': &lt;Faces.TWO: 2&gt;, '3': &lt;Faces.THREE: 3&gt;, '4': &lt;Faces.FOUR: 4&gt;, '5': &lt;Faces.FIVE: 5&gt;, '6': &lt;Faces.SIX: 6&gt;, '7': &lt;Faces.SEVEN: 7&gt;, '8': &lt;Faces.EIGHT: 8&gt;, '9': &lt;Faces.NINE: 9&gt;, 'A': &lt;Faces.ACE: 1&gt;, ...}</dl>
+
+<dl><dt><strong>SUIT_CHAR_LOOKUP</strong> = {&lt;Suits.DIAMONDS: 1&gt;: '♦', &lt;Suits.CLUBS: 2&gt;: '♣', &lt;Suits.HEARTS: 3&gt;: '♥', &lt;Suits.SPADES: 4&gt;: '♠'}</dl>
+
+<dl><dt><strong>SUIT_TYPEABLE_LOOKUP</strong> = {'C': &lt;Suits.CLUBS: 2&gt;, 'D': &lt;Suits.DIAMONDS: 1&gt;, 'H': &lt;Suits.HEARTS: 3&gt;, 'S': &lt;Suits.SPADES: 4&gt;}</dl>
 
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -198,8 +222,6 @@ required&nbsp;to&nbsp;fill&nbsp;the&nbsp;piles&nbsp;than&nbsp;there&nbsp;are&nbs
 when&nbsp;the&nbsp;current&nbsp;pile&nbsp;is&nbsp;empty,&nbsp;and&nbsp;return&nbsp;the&nbsp;piles,&nbsp;irrespective<br>
 of&nbsp;the&nbsp;fact&nbsp;they&nbsp;are&nbsp;not&nbsp;totally&nbsp;filled</tt></dd></dl>
 
-<dl><dt><a name="Deck-get"><strong>get</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;list&nbsp;of&nbsp;cards&nbsp;in&nbsp;the&nbsp;pile</tt></dd></dl>
-
 <dl><dt><a name="Deck-peek"><strong>peek</strong></a>(self, position=-1)</dt><dd><tt>Peek&nbsp;at&nbsp;the&nbsp;value&nbsp;of&nbsp;a&nbsp;card&nbsp;in&nbsp;the&nbsp;pile,&nbsp;by&nbsp;default&nbsp;the&nbsp;top&nbsp;card,&nbsp;or<br>
 at&nbsp;a&nbsp;specified&nbsp;position&nbsp;in&nbsp;the&nbsp;pile</tt></dd></dl>
 
@@ -218,6 +240,9 @@ Data descriptors inherited from <a href="cards.html#Pile">Pile</a>:<br>
 </dl>
 <dl><dt><strong>__weakref__</strong></dt>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>cards</strong></dt>
+<dd><tt>Get&nbsp;the&nbsp;list&nbsp;of&nbsp;cards&nbsp;in&nbsp;the&nbsp;pile</tt></dd>
 </dl>
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -330,8 +355,6 @@ required&nbsp;to&nbsp;fill&nbsp;the&nbsp;piles&nbsp;than&nbsp;there&nbsp;are&nbs
 when&nbsp;the&nbsp;current&nbsp;pile&nbsp;is&nbsp;empty,&nbsp;and&nbsp;return&nbsp;the&nbsp;piles,&nbsp;irrespective<br>
 of&nbsp;the&nbsp;fact&nbsp;they&nbsp;are&nbsp;not&nbsp;totally&nbsp;filled</tt></dd></dl>
 
-<dl><dt><a name="Pile-get"><strong>get</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;list&nbsp;of&nbsp;cards&nbsp;in&nbsp;the&nbsp;pile</tt></dd></dl>
-
 <dl><dt><a name="Pile-peek"><strong>peek</strong></a>(self, position=-1)</dt><dd><tt>Peek&nbsp;at&nbsp;the&nbsp;value&nbsp;of&nbsp;a&nbsp;card&nbsp;in&nbsp;the&nbsp;pile,&nbsp;by&nbsp;default&nbsp;the&nbsp;top&nbsp;card,&nbsp;or<br>
 at&nbsp;a&nbsp;specified&nbsp;position&nbsp;in&nbsp;the&nbsp;pile</tt></dd></dl>
 
@@ -350,6 +373,9 @@ Data descriptors defined here:<br>
 </dl>
 <dl><dt><strong>__weakref__</strong></dt>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>cards</strong></dt>
+<dd><tt>Get&nbsp;the&nbsp;list&nbsp;of&nbsp;cards&nbsp;in&nbsp;the&nbsp;pile</tt></dd>
 </dl>
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
