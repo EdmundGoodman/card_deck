@@ -39,7 +39,6 @@ class Card:
     def getTypeableName(self):
         faceNum = self.face.value
         suitChar = self.suit.name[0]
-        #If it's a picture card, use it's first letter to denote it
         if faceNum in [1,11,12,13]:
             faceChar = self.face.name[0]
         else:
@@ -86,12 +85,13 @@ class Card:
 class CardFromTypeableName:
     SUIT_LOOKUP = {s.name[0]:s for s in Suits}
     FACE_LOOKUP = {str(f.value):f for f in Faces if f not in [1,10,11,12]}
+    #If it's a picture card, use it's first letter to denote it
     FACE_LOOKUP["A"] = Faces.ACE
     FACE_LOOKUP["J"] = Faces.JACK
     FACE_LOOKUP["Q"] = Faces.QUEEN
     FACE_LOOKUP["K"] = Faces.KING
 
-    def __init__(self, typeableName):
+    def getCard(self, typeableName):
         faceChar, suitChar = typeableName[0], typeableName[1]
         face, suit = None, None
 
@@ -101,11 +101,9 @@ class CardFromTypeableName:
             suit = CardFromTypeableName.SUIT_LOOKUP[suitChar]
 
         if len(typeableName) == 2 and face is not None and suit is not None:
-            card = Card(face, suit)
-            self.__class__ = card.__class__
-            self.__dict__ = card.__dict__
+            return Card(face, suit)
         else:
-            raise ValueError("CardFromTypeableName requires a valid typeable name")
+            return None
 
 
 
@@ -193,14 +191,12 @@ if __name__=="__main__":
 
     print(Card(Faces.SIX, Suits.SPADES).getTypeableName())
 
-    print(type(CardFromTypeableName("AH")))
+
     while True:
         inp = str(input("Enter the typeable name of a card: "))
-        try:
-            card = CardFromTypeableName(inp)
+        card = CardFromTypeableName().getCard(inp)
+        if card is not None:
             break
-        except ValueError as e:
-            print(e)
     print(card)
 
 
