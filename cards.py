@@ -1,4 +1,24 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Provides Card, Pile, and Deck classes for modelling cards, with Suits and
+Faces enums as backend data structures
+
+Suits and Faces are enums containing the names and values of their respective
+items. Card models a single card, Pile models an ordered list of cards of
+arbitrary length, and Deck models a Pile of cards containing every permutation
+of suit and face, initially ordered by the enum values.
+"""
+
 from enum import Enum, unique
+
+__author__ = "Edmund Goodman"
+__copyright__ = "Copyright 2020, Edmund Goodman"
+__credits__ = ["Edmund Goodman"]
+__license__ = "GPL"
+__maintainer__ = "Edmund Goodman"
+__email__ = "egoodman3141@gmail.com"
+
 
 @unique
 class Suits(Enum):
