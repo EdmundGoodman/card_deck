@@ -24,15 +24,20 @@ __email__ = "egoodman3141@gmail.com"
 
 @unique
 class Suits(Enum):
-    """An Enum class for the suits in a deck of cards"""
+    """An Enum class for the suits in of a card"""
     DIAMONDS = 1
     CLUBS = 2
     HEARTS = 3
     SPADES = 4
 
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return "An Enum object for the Suits of a card"
+
+
 @unique
 class Faces(Enum):
-    """An Enum class for the faces in a deck of cards"""
+    """An Enum class for the faces of a card"""
     ACE = 1
     TWO = 2
     THREE = 3
@@ -47,6 +52,11 @@ class Faces(Enum):
     QUEEN = 12
     KING = 13
 
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return "An Enum object for the Faces of a card"
+
+
 
 class CardLookupData:
     """Utility class storing data to lookup how to print cards, and
@@ -57,9 +67,14 @@ class CardLookupData:
                                 if f.value in [1,11,12,13]})
     SUIT_LOOKUP_TYPEABLE = {s.name[0]:s for s in Suits}
 
-    FACE_LOOKUP_CHAR = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i] for i,f in enumerate(Faces)}
-    SUIT_LOOKUP_CHAR = {f:'♦,♣,♥,♠'.split(",")[i] for i,f in enumerate(Suits)}
+    FACE_LOOKUP_CHAR = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i]
+                        for i,f in enumerate(Faces)}
+    SUIT_LOOKUP_CHAR = {f:'♦,♣,♥,♠'.split(",")[i]
+                        for i,f in enumerate(Suits)}
 
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return """A utility class storing lookup data about cards"""
 
 
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
@@ -137,6 +152,10 @@ class Card:
         prettily denote the suit"""
         return str(self)
 
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return """An immutable object representing a card, requires arguments
+which are instances of the Face and Suit enums"""
 
 
 class CardFromTypeableName:
@@ -159,8 +178,12 @@ class CardFromTypeableName:
         else:
             return None
 
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return "A utility class to generate a Card from its typeable name"
 
 
+@total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Pile:
     """A Pile object, which represents an ordered list of cards of arbitrary
     length"""
@@ -180,13 +203,16 @@ class Pile:
         """Set the list of cards in the pile"""
         self._cards = cards
 
-
     def pop(self, position=None):
         """Pop a card off the pile, by default from the top, or at a specified
         position in the pile"""
         if position is None:
             position = len(self._cards) - 1
         return self._cards.pop()
+
+    def remove(self, card):
+        """Remove a card from the Pile"""
+        self._card.remove(card)
 
     def peek(self, position=-1):
         """Peek at the value of a card in the pile, by default the top card, or
@@ -199,6 +225,10 @@ class Pile:
         if position is None:
             position = len(self._cards)
         self._cards.insert(position, card)
+
+    def append(self, card):
+        """Append the card to the Pile"""
+        self._cards.append(card)
 
     def shuffle(self):
         """Randomly shuffle the order of the cards in the pile"""
@@ -218,6 +248,30 @@ class Pile:
                 except IndexError:
                     return sets
         return sets
+
+    def clear(self):
+        """Empty the contents of the Pile"""
+        self._cards = []
+
+    def count(self, card):
+        """Count the number of instances of a card in the Pile"""
+        return self._cards.count(card)
+
+    def copy(self):
+        """Return a copy of the Pile"""
+        return Pile(self._cards)
+
+    def extend(self, other):
+        """Extend the pile contents by another pile"""
+        self._cards = self.cards + other.cards
+
+    def reverse(self):
+        """Reverse the order of the Pile"""
+        self._cards.reverse()
+
+    def sort(self):
+        """Sort the Pile into ascending order"""
+        self._cards.sort()
 
     def __add__(self, other):
         """Concatenate a pile to the end of the current pile"""
@@ -265,10 +319,9 @@ class Pile:
         in the same order)"""
         return self._cards == other.cards
 
-    def __ne__(self, other):
-        """Return whether two piles are not equal (i.e. contain the same cards
-        in the same order)"""
-        return self._cards != other.cards
+    def __lt__(self, other):
+        """Return whether this pile is smaller than the other pile"""
+        return len(self) < len(other)
 
     def __hash__(self):
         """Generate a unique integer representation of the pile"""
@@ -284,6 +337,11 @@ class Pile:
         of the string representations of the cards it holds"""
         return str(self)
 
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return """A mutable sequence of cards. If no argument is given the
+constructor creates an empty pile. The argument must be iterable if specified"""
+
 
 
 class Deck(Pile):
@@ -294,6 +352,11 @@ class Deck(Pile):
         for suit in Suits:
             for face in Faces:
                 self._cards.append(Card(face, suit))
+
+    def __doc__(self):
+        """Return a string summary of the class"""
+        return """A child of the Pile class, which is constructed containing
+all the cards in a single deck in order"""
 
 
 
@@ -324,9 +387,10 @@ if __name__=="__main__":
 
     #Test operations on Decks and Piles
     print(dir(d1))
+    print(Card.__doc__(Card))
     print(d1)
     print(d2)
-    print(d1-d2)
+    print(d1 - d2)
     print(d1 ^ d2)
     print(d1 and d3)
     print(d1 is copy.deepcopy(d1))
