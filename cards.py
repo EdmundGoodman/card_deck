@@ -10,6 +10,7 @@ arbitrary length, and Deck models a Pile of cards containing every permutation
 of suit and face, initially ordered by the enum values.
 """
 
+from functools import total_ordering
 from enum import Enum, unique
 import random
 
@@ -50,44 +51,45 @@ class Faces(Enum):
 class CardLookupData:
     """Utility class storing data to lookup how to print cards, and
     accept them as typeable characters"""
-    FACE_TYPEABLE_LOOKUP = {str(f.value):f for f in Faces
+    FACE_LOOKUP_TYPEABLE = {str(f.value):f for f in Faces
                             if f.value not in [1,11,12,13]}
-    FACE_TYPEABLE_LOOKUP.update({str(f.name)[0]:f for f in Faces
+    FACE_LOOKUP_TYPEABLE.update({str(f.name)[0]:f for f in Faces
                                 if f.value in [1,11,12,13]})
-    SUIT_TYPEABLE_LOOKUP = {s.name[0]:s for s in Suits}
+    SUIT_LOOKUP_TYPEABLE = {s.name[0]:s for s in Suits}
 
-    FACE_CHAR_LOOKUP = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i] for i,f in enumerate(Faces)}
-    SUIT_CHAR_LOOKUP = {f:'♦,♣,♥,♠'.split(",")[i] for i,f in enumerate(Suits)}
+    FACE_LOOKUP_CHAR = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i] for i,f in enumerate(Faces)}
+    SUIT_LOOKUP_CHAR = {f:'♦,♣,♥,♠'.split(",")[i] for i,f in enumerate(Suits)}
 
 
 
+@total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Card:
-    """A model of a card as having a suit and a face, a printeable and a
+    """A model of a card as having a Face and a Suit, a printeable and a
     typeable name, and value with respect other cards"""
 
     def __init__(self, face, suit):
-        """Initialise the card as having a face and a suit"""
+        """Initialise the card as having a Face and a Suit"""
         self._face = face
         self._suit = suit
 
     @property
     def face(self):
-        """Get the face of the card"""
+        """Get the Face of the card"""
         return self._face
 
     @face.setter
     def face(self):
-        """Raise an error on trying to change the face of a card"""
+        """Raise an error on trying to change the Face of a card"""
         raise ValueError("'Card.face' property does not support assignment")
 
     @property
     def suit(self):
-        """Get the suit of the card"""
+        """Get the Suit of the card"""
         return self._suit
 
     @suit.setter
     def suit(self):
-        """Raise an error on trying to change the face of a card"""
+        """Raise an error on trying to change the Face of a card"""
         raise ValueError("'Card.suit' property does not support assignment")
 
     def getTypeableName(self):
@@ -111,10 +113,6 @@ class Card:
         """Return the equality between two cards"""
         return self._face == other.face and self._suit == other.suit
 
-    def __ne__(self, other):
-        """Return the inequality between two cards"""
-        return self == other
-
     def __lt__(self, other):
         """Return whether the card has a lower value than another card, first
         by comparing faces, then if they are equal by comparing suits"""
@@ -123,38 +121,20 @@ class Card:
         else:
             return self._suit < other.suit
 
-    def __le__(self, other):
-        """Return whether the card has a lower or equal value than another card,
-        first by comparing faces, then if they are equal by comparing suits"""
-        return self < other or self == other
-
-    def __gt__(self, other):
-        """Return whether the card has a greater value than another card, first
-        by comparing faces, then if they are equal by comparing suits"""
-        if self._face > other.face:
-            return True
-        else:
-            return self._suit > other.suit
-
-    def __ge__(self, other):
-        """Return whether the card has a greater or equal value than another card,
-        first by comparing faces, then if they are equal by comparing suits"""
-        return self > other or self == other
-
     def __hash__(self):
         """Generate a unique integer representation of the card"""
         return hash(str(self._face.value)+str(self._suit.value))
 
     def __str__(self):
-        """Get a string representing the card, using UTF-8 characters to
-        prettily denote the suit"""
-        faceStr = CardLookupData.FACE_CHAR_LOOKUP[self._face]
-        suitStr = CardLookupData.SUIT_CHAR_LOOKUP[self._suit]
+        """Use the string representation of the card as the informal
+        representation of the card"""
+        faceStr = CardLookupData.FACE_LOOKUP_CHAR[self._face]
+        suitStr = CardLookupData.SUIT_LOOKUP_CHAR[self._suit]
         return faceStr + suitStr
 
     def __repr__(self):
-        """Use the string representation of the card as the informal
-        representation of the card"""
+        """Get a string representing the card, using UTF-8 characters to
+        prettily denote the suit"""
         return str(self)
 
 
@@ -169,10 +149,10 @@ class CardFromTypeableName:
         faceChar, suitChar = typeableName[0], typeableName[1]
         face, suit = None, None
 
-        if faceChar in CardLookupData.FACE_TYPEABLE_LOOKUP:
-            face = CardLookupData.FACE_TYPEABLE_LOOKUP[faceChar]
-        if suitChar in CardLookupData.SUIT_TYPEABLE_LOOKUP:
-            suit = CardLookupData.SUIT_TYPEABLE_LOOKUP[suitChar]
+        if faceChar in CardLookupData.FACE_LOOKUP_TYPEABLE:
+            face = CardLookupData.FACE_LOOKUP_TYPEABLE[faceChar]
+        if suitChar in CardLookupData.SUIT_LOOKUP_TYPEABLE:
+            suit = CardLookupData.SUIT_LOOKUP_TYPEABLE[suitChar]
 
         if len(typeableName) == 2 and face is not None and suit is not None:
             return Card(face, suit)
@@ -213,7 +193,7 @@ class Pile:
         at a specified position in the pile"""
         return self._cards[position]
 
-    def place(self, card, position=None):
+    def insert(self, card, position=None):
         """Place a card into the pile, by default to the top, or at a specified
         position in the pile"""
         if position is None:
@@ -234,7 +214,7 @@ class Pile:
         for i in range(numCards):
             for j in range(numSets):
                 try:
-                    sets[j].place(self.pop())
+                    sets[j].insert(self.pop())
                 except IndexError:
                     return sets
         return sets
@@ -261,6 +241,14 @@ class Pile:
         """Get the size of the pile"""
         return len(self._cards)
 
+    def __getitem__(self, position):
+        """Get the item at an index in the Pile"""
+        return self._cards[position]
+
+    def __reversed__(self):
+        """Return a new Pile of the current cards, but in reverse order"""
+        return Pile(self._cards[::-1])
+
     def __and__(self, other):
         """Return the intersection of the current and another pile of cards"""
         return Pile([item for item in self._cards if item in other.cards])
@@ -269,28 +257,31 @@ class Pile:
         """Return the union of the current and another pile of cards"""
         return Pile(list(set(self._cards).union(set(other.cards))))
 
+    def __xor__(self, other):
+        return (self or other) - (self and other)
+
     def __eq__(self, other):
         """Return whether two piles are equal (i.e. contain the same cards
         in the same order)"""
         return self._cards == other.cards
 
     def __ne__(self, other):
-        """Return whether two piles are not equal (i.e. don't contain the same
-        cards in the same order)"""
-        return not self == other
+        """Return whether two piles are not equal (i.e. contain the same cards
+        in the same order)"""
+        return self._cards != other.cards
 
     def __hash__(self):
         """Generate a unique integer representation of the pile"""
         return hash("".join([str(hash(x)) for x in self._cards]))
 
     def __str__(self):
-        """Return a string representation of the pile, formatted as a list
-        of the string representations of the cards it holds"""
+        """Use the string representation of the pile as the informal
+        representation of the pile"""
         return ", ".join([str(x) for x in self._cards])
 
     def __repr__(self):
-        """Use the string representation of the pile as the informal
-        representation of the pile"""
+        """Return a string representation of the pile, formatted as a list
+        of the string representations of the cards it holds"""
         return str(self)
 
 
@@ -322,6 +313,7 @@ if __name__=="__main__":
     print(card)
 
 
+
     #Test making Decks and Pile
     d1 = Deck()
     d2 = Pile([Card(Faces.ACE, Suits.DIAMONDS)])
@@ -331,9 +323,11 @@ if __name__=="__main__":
     ])
 
     #Test operations on Decks and Piles
+    print(dir(d1))
     print(d1)
     print(d2)
     print(d1-d2)
+    print(d1 ^ d2)
     print(d1 and d3)
     print(d1 is copy.deepcopy(d1))
 
