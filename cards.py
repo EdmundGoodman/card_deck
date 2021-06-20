@@ -57,6 +57,9 @@ class Faces(Enum):
         return "An Enum object for the Faces of a card"
 
 
+class CardError(Exception):
+    pass
+
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Card:
     """A model of a card as having a Face and a Suit, a printeable and a
@@ -85,7 +88,7 @@ class Card:
     @face.setter
     def face(self):
         """Raise an error on trying to change the Face of a card"""
-        raise ValueError("'Card.face' property does not support assignment")
+        raise CardError("'Card.face' property does not support assignment")
 
     @property
     def suit(self):
@@ -95,7 +98,7 @@ class Card:
     @suit.setter
     def suit(self):
         """Raise an error on trying to change the Face of a card"""
-        raise ValueError("'Card.suit' property does not support assignment")
+        raise CardError("'Card.suit' property does not support assignment")
 
     @staticmethod
     def getCardByTypeableName(typeableName):
@@ -116,14 +119,17 @@ class Card:
 
         if faceChar in Card.LOOKUP_FACE_TYPEABLE:
             face = Card.LOOKUP_FACE_TYPEABLE[faceChar]
+        else:
+            raise CardError("Cannot build card with invalid face: '{}'".format(
+                            faceChar))
         if suitChar in Card.LOOKUP_SUIT_TYPEABLE:
             suit = Card.LOOKUP_SUIT_TYPEABLE[suitChar]
-
-        if face is not None and suit is not None:
-            return Card(face, suit)
         else:
-            return None
-
+            raise CardError("Cannot build card with invalid suit: '{}'".format(
+                            faceChar))
+        
+        return Card(face, suit)
+        
     def getTypeableName(self):
         """Get the typeable name of the card, i.e. a unique string to describe
         a card's value.
@@ -168,6 +174,9 @@ class Card:
 which are instances of the Face and Suit enums"""
 
 
+class PileError(Exception):
+    pass
+
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Pile:
     """A Pile object, which represents an ordered list of cards of arbitrary
@@ -188,19 +197,18 @@ class Pile:
         """Set the list of cards in the pile"""
         self._cards = cards
 
-    def pop(self, position=None):
-        """Pop a card off the pile, by default from the top, or at a specified
-        position in the pile"""
-        if position is not None:
-            card = self._cards[position]
-            self._cards = self._cards[:position].extend(self._cards[position+1:])
-            return card
-        else:
-            return self._cards.pop()
+    def pop(self):
+        """Pop a card off the top of the pile"""
+        if self.empty():
+            raise PileError("Cannot pop card from empty pile")
+        return self._cards.pop()
 
     def remove(self, card):
         """Remove a card from the Pile"""
-        self._card.remove(card)
+        if card not in self._cards:
+            raise PileError("Cannot remove '{}' as it is not in the pile".format(
+                            card))
+        self._cards.remove(card)
 
     def peek(self, position=-1):
         """Peek at the value of a card in the pile, by default the top card, or
@@ -221,6 +229,10 @@ class Pile:
     def shuffle(self):
         """Randomly shuffle the order of the cards in the pile"""
         random.shuffle(self._cards)
+
+    def sort(self):
+        """Sort the pile of cards in the total ordering of the cards"""
+        self._cards.sort()
 
     def deal(self, numSets, numCards):
         """Deal cards from the pile into a specified number of new piles,
@@ -244,6 +256,14 @@ class Pile:
     def count(self, card):
         """Count the number of instances of a card in the Pile"""
         return self._cards.count(card)
+
+    def size(self):
+        """Return the number of cards in the pile"""
+        return len(self._cards)
+
+    def empty(self):
+        """Return whether the pile is empty"""
+        return self.size() == 0
 
     def copy(self):
         """Return a copy of the Pile"""
@@ -349,8 +369,8 @@ all the cards in a single deck in order"""
 
 
 if __name__=="__main__":
+    """Example usage:"""
 
-    """Test the interfaces of the objects"""
     import copy
 
     #Test getting the typeable name of a card
@@ -363,8 +383,6 @@ if __name__=="__main__":
         if card is not None:
             break
     print(card)
-
-
 
     #Test making Decks and Pile
     d1 = Deck()
