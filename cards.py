@@ -191,10 +191,12 @@ class Pile:
     def pop(self, position=None):
         """Pop a card off the pile, by default from the top, or at a specified
         position in the pile"""
-        if position is None:
-            position = len(self._cards) - 1
+        if position is not None:
+            card = self._cards[position]
             self._cards = self._cards[:position].extend(self._cards[position+1:])
-        return self._cards.pop()
+            return card
+        else:
+            return self._cards.pop()
 
     def remove(self, card):
         """Remove a card from the Pile"""
