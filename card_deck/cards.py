@@ -86,7 +86,7 @@ class Card:
         return self._face
 
     @face.setter
-    def face(self):
+    def face(self, v):
         """Raise an error on trying to change the Face of a card"""
         raise CardError("'Card.face' property does not support assignment")
 
@@ -96,12 +96,12 @@ class Card:
         return self._suit
 
     @suit.setter
-    def suit(self):
+    def suit(self, v):
         """Raise an error on trying to change the Face of a card"""
         raise CardError("'Card.suit' property does not support assignment")
 
     @staticmethod
-    def getCardByTypeableName(typeableName):
+    def get_from_typeable_name(typeable_name):
         """Return the Card object specified by the typeable name. If the name
         does not reference a valid card, return None
         
@@ -111,26 +111,26 @@ class Card:
         the suit, as the first letter of the suit name.
         For example, the ace of hearts would be 'AH', whereas the five of clubs
         would be '5C'"""
-        if len(typeableName) == 2:
-            faceChar, suitChar = typeableName[0], typeableName[1].upper()
+        if len(typeable_name) == 2:
+            face_char, suit_char = typeable_name[0], typeable_name[1].upper()
             face, suit = None, None
         else:
             return None
 
-        if faceChar in Card.LOOKUP_FACE_TYPEABLE:
-            face = Card.LOOKUP_FACE_TYPEABLE[faceChar]
+        if face_char in Card.LOOKUP_FACE_TYPEABLE:
+            face = Card.LOOKUP_FACE_TYPEABLE[face_char]
         else:
             raise CardError("Cannot build card with invalid face: '{}'".format(
-                            faceChar))
-        if suitChar in Card.LOOKUP_SUIT_TYPEABLE:
-            suit = Card.LOOKUP_SUIT_TYPEABLE[suitChar]
+                            face_char))
+        if suit_char in Card.LOOKUP_SUIT_TYPEABLE:
+            suit = Card.LOOKUP_SUIT_TYPEABLE[suit_char]
         else:
             raise CardError("Cannot build card with invalid suit: '{}'".format(
-                            faceChar))
+                            face_char))
         
         return Card(face, suit)
         
-    def getTypeableName(self):
+    def get_typeable_name(self):
         """Get the typeable name of the card, i.e. a unique string to describe
         a card's value.
 
@@ -234,15 +234,15 @@ class Pile:
         """Sort the pile of cards in the total ordering of the cards"""
         self._cards.sort()
 
-    def deal(self, numSets, numCards):
+    def deal(self, num_sets, num_cards):
         """Deal cards from the pile into a specified number of new piles,
         each containing a specified number of cards. If there are more cards
         required to fill the piles than there are in the current pile, stop
         when the current pile is empty, and return the piles, irrespective
         of the fact they are not totally filled"""
-        sets = [Pile() for n in range(numSets)]
-        for i in range(numCards):
-            for j in range(numSets):
+        sets = [Pile() for _ in range(num_sets)]
+        for _ in range(num_cards):
+            for j in range(num_sets):
                 try:
                     sets[j].insert(self.pop())
                 except IndexError:
@@ -374,12 +374,12 @@ if __name__=="__main__":
     import copy
 
     #Test getting the typeable name of a card
-    print(Card(Faces.SIX, Suits.SPADES).getTypeableName())
+    print(Card(Faces.SIX, Suits.SPADES).get_typeable_name())
 
     #Test gettting a card form its typeable name
     while True:
         inp = str(input("Enter the typeable name of a card: "))
-        card = Card.getCardByTypeableName(inp)
+        card = Card.get_from_typeable_name(inp)
         if card is not None:
             break
     print(card)
