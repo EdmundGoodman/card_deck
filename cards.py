@@ -57,30 +57,20 @@ class Faces(Enum):
         return "An Enum object for the Faces of a card"
 
 
-
-class CardLookupData:
-    """Utility class storing data to lookup how to print cards, and
-    accept them as typeable characters"""
-    FACE_LOOKUP_TYPEABLE = {str(f.value):f for f in Faces
-                            if f.value not in [1,11,12,13]}
-    FACE_LOOKUP_TYPEABLE.update({str(f.name)[0]:f for f in Faces
-                                if f.value in [1,11,12,13]})
-    SUIT_LOOKUP_TYPEABLE = {s.name[0]:s for s in Suits}
-
-    FACE_LOOKUP_CHAR = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i]
-                        for i,f in enumerate(Faces)}
-    SUIT_LOOKUP_CHAR = {f:'♦,♣,♥,♠'.split(",")[i]
-                        for i,f in enumerate(Suits)}
-
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return """A utility class storing lookup data about cards"""
-
-
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Card:
     """A model of a card as having a Face and a Suit, a printeable and a
     typeable name, and value with respect other cards"""
+
+    LOOKUP_FACE_CHAR = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i]
+                        for i,f in enumerate(Faces)}
+    LOOKUP_SUIT_CHAR = {s:'♦,♣,♥,♠'.split(",")[i]
+                        for i,s in enumerate(Suits)}
+    LOOKUP_SUIT_LETTER = {s:s.name[0] for s in Suits}
+
+    LOOKUP_FACE_TYPEABLE = {v:k for k,v in LOOKUP_FACE_CHAR.items()}
+    LOOKUP_SUIT_TYPEABLE = {v:k for k,v in LOOKUP_SUIT_LETTER.items()}
+
 
     def __init__(self, face, suit):
         """Initialise the card as having a Face and a Suit"""
@@ -107,22 +97,44 @@ class Card:
         """Raise an error on trying to change the Face of a card"""
         raise ValueError("'Card.suit' property does not support assignment")
 
-    def getTypeableName(self):
-        """Get the typeable name of the card, i.e. a unique string to describe
-        a card's value.
+    @staticmethod
+    def getCardByTypeableName(typeableName):
+        """Return the Card object specified by the typeable name. If the name
+        does not reference a valid card, return None
+        
         The first character of this string represents the face, as either the
         first letter of the face name if it is a picture card, or the number
         of the face if it is not. The second character of this string reprsents
         the suit, as the first letter of the suit name.
         For example, the ace of hearts would be 'AH', whereas the five of clubs
         would be '5C'"""
-        faceNum = self._face.value
-        suitChar = self._suit.name[0]
-        if faceNum in [1,11,12,13]:
-            faceChar = self._face.name[0]
+        if len(typeableName) == 2:
+            faceChar, suitChar = typeableName[0], typeableName[1].upper()
+            face, suit = None, None
         else:
-            faceChar = str(faceNum)
-        return faceChar + suitChar
+            return None
+
+        if faceChar in Card.LOOKUP_FACE_TYPEABLE:
+            face = Card.LOOKUP_FACE_TYPEABLE[faceChar]
+        if suitChar in Card.LOOKUP_SUIT_TYPEABLE:
+            suit = Card.LOOKUP_SUIT_TYPEABLE[suitChar]
+
+        if face is not None and suit is not None:
+            return Card(face, suit)
+        else:
+            return None
+
+    def getTypeableName(self):
+        """Get the typeable name of the card, i.e. a unique string to describe
+        a card's value.
+
+        The first character of this string represents the face, as either the
+        first letter of the face name if it is a picture card, or the number
+        of the face if it is not. The second character of this string reprsents
+        the suit, as the first letter of the suit name.
+        For example, the ace of hearts would be 'AH', whereas the five of clubs
+        would be '5C'"""
+        return Card.LOOKUP_FACE_CHAR[self._face] + Card.LOOKUP_SUIT_LETTER[self._suit]
 
     def __eq__(self, other):
         """Return the equality between two cards"""
@@ -143,9 +155,7 @@ class Card:
     def __str__(self):
         """Use the string representation of the card as the informal
         representation of the card"""
-        faceStr = CardLookupData.FACE_LOOKUP_CHAR[self._face]
-        suitStr = CardLookupData.SUIT_LOOKUP_CHAR[self._suit]
-        return faceStr + suitStr
+        return Card.LOOKUP_FACE_CHAR[self._face] + Card.LOOKUP_SUIT_CHAR[self._suit]
 
     def __repr__(self):
         """Get a string representing the card, using UTF-8 characters to
@@ -156,31 +166,6 @@ class Card:
         """Return a string summary of the class"""
         return """An immutable object representing a card, requires arguments
 which are instances of the Face and Suit enums"""
-
-
-class CardFromTypeableName:
-    """A utility class to generate a Card object from its typeable name,
-    to streamline data entry of cards via a text format"""
-
-    def getCard(self, typeableName):
-        """Return the Card object specified by the typeable name. If the name
-        does not reference a valid card, return None"""
-        faceChar, suitChar = typeableName[0], typeableName[1]
-        face, suit = None, None
-
-        if faceChar in CardLookupData.FACE_LOOKUP_TYPEABLE:
-            face = CardLookupData.FACE_LOOKUP_TYPEABLE[faceChar]
-        if suitChar in CardLookupData.SUIT_LOOKUP_TYPEABLE:
-            suit = CardLookupData.SUIT_LOOKUP_TYPEABLE[suitChar]
-
-        if len(typeableName) == 2 and face is not None and suit is not None:
-            return Card(face, suit)
-        else:
-            return None
-
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return "A utility class to generate a Card from its typeable name"
 
 
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
@@ -208,6 +193,7 @@ class Pile:
         position in the pile"""
         if position is None:
             position = len(self._cards) - 1
+            self._cards = self._cards[:position].extend(self._cards[position+1:])
         return self._cards.pop()
 
     def remove(self, card):
@@ -361,6 +347,7 @@ all the cards in a single deck in order"""
 
 
 if __name__=="__main__":
+
     """Test the interfaces of the objects"""
     import copy
 
@@ -370,7 +357,7 @@ if __name__=="__main__":
     #Test gettting a card form its typeable name
     while True:
         inp = str(input("Enter the typeable name of a card: "))
-        card = CardFromTypeableName().getCard(inp)
+        card = Card.getCardByTypeableName(inp)
         if card is not None:
             break
     print(card)
