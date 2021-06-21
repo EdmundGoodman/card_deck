@@ -3,6 +3,12 @@ Card Deck
 
 An object model of a pack of cards, written in Python, to streamline writing programs to model/play games involving cards
 
+
+Documentation
+-------------
+
+Documentation for the library can be found here: [https://card-deck.readthedocs.io/en/latest/](https://card-deck.readthedocs.io/en/latest/)
+
 Importing the module
 --------------------
 

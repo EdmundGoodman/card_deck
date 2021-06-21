@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 with open("README.md", "r") as fh:
@@ -6,8 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name = 'card_deck',
-    packages = ['card_deck'],
-    version = '1.0.0',
+    version = '1.0.1',
     license='MIT',
     description = 'An object model of a pack of cards',
     long_description=long_description,
@@ -15,7 +14,8 @@ setup(
     author = 'Edmund Goodman',
     author_email = 'egoodman3141@gmail.com',
     url = 'https://github.com/EdmundGoodman/card_deck',
-    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.0.tar.gz',        # I explain this later on
+    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.1.tar.gz',
+    packages=find_packages(),
     keywords = ['game', 'card', 'model'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
