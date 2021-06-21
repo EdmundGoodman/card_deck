@@ -49,30 +49,27 @@ class Faces(Enum):
     KING = 13
 
 
-
 class CardError(Exception):
-    pass
+    """A custom exception to indicate an error occuring in the Card class"""
 
 
 class PileError(Exception):
-    pass
+    """A custom exception to indicate an error occuring in the Pile class"""
 
 
-
-@total_ordering #Only need to define __eq__ and __lt__ for all comparisons
+@total_ordering
 class Card:
     """A model of a card as having a Face and a Suit, a printeable and a
     typeable name, and value with respect other cards"""
 
-    LOOKUP_FACE_CHAR = {f:"A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i]
-                        for i,f in enumerate(Faces)}
-    LOOKUP_SUIT_CHAR = {s:'♦,♣,♥,♠'.split(",")[i]
-                        for i,s in enumerate(Suits)}
-    LOOKUP_SUIT_LETTER = {s:s.name[0] for s in Suits}
+    LOOKUP_FACE_CHAR = {f: "A,2,3,4,5,6,7,8,9,10,J,Q,K".split(",")[i]
+                        for i, f in enumerate(Faces)}
+    LOOKUP_SUIT_CHAR = {s: '♦,♣,♥,♠'.split(",")[i]
+                        for i, s in enumerate(Suits)}
+    LOOKUP_SUIT_LETTER = {s: s.name[0] for s in Suits}
 
-    LOOKUP_FACE_TYPEABLE = {v:k for k,v in LOOKUP_FACE_CHAR.items()}
-    LOOKUP_SUIT_TYPEABLE = {v:k for k,v in LOOKUP_SUIT_LETTER.items()}
-
+    LOOKUP_FACE_TYPEABLE = {v: k for k, v in LOOKUP_FACE_CHAR.items()}
+    LOOKUP_SUIT_TYPEABLE = {v: k for k, v in LOOKUP_SUIT_LETTER.items()}
 
     def __init__(self, face, suit):
         """Initialise the card as having a Face and a Suit"""
@@ -85,7 +82,7 @@ class Card:
         return self._face
 
     @face.setter
-    def face(self, v):
+    def face(self, value):
         """Raise an error on trying to change the Face of a card"""
         raise CardError("'Card.face' property does not support assignment")
 
@@ -95,7 +92,7 @@ class Card:
         return self._suit
 
     @suit.setter
-    def suit(self, v):
+    def suit(self, value):
         """Raise an error on trying to change the Face of a card"""
         raise CardError("'Card.suit' property does not support assignment")
 
@@ -103,7 +100,7 @@ class Card:
     def get_from_typeable_name(typeable_name):
         """Return the Card object specified by the typeable name. If the name
         does not reference a valid card, return None
-        
+
         The first character of this string represents the face, as either the
         first letter of the face name if it is a picture card, or the number
         of the face if it is not. The second character of this string reprsents
@@ -126,20 +123,14 @@ class Card:
         else:
             raise CardError("Cannot build card with invalid suit: '{}'".format(
                             face_char))
-        
+
         return Card(face, suit)
-        
+
     def get_typeable_name(self):
         """Get the typeable name of the card, i.e. a unique string to describe
-        a card's value.
-
-        The first character of this string represents the face, as either the
-        first letter of the face name if it is a picture card, or the number
-        of the face if it is not. The second character of this string reprsents
-        the suit, as the first letter of the suit name.
-        For example, the ace of hearts would be 'AH', whereas the five of clubs
-        would be '5C'"""
-        return Card.LOOKUP_FACE_CHAR[self._face] + Card.LOOKUP_SUIT_LETTER[self._suit]
+        a card's value"""
+        return (Card.LOOKUP_FACE_CHAR[self._face]
+                + Card.LOOKUP_SUIT_LETTER[self._suit])
 
     def __eq__(self, other):
         """Return the equality between two cards"""
@@ -150,8 +141,8 @@ class Card:
         by comparing faces, then if they are equal by comparing suits"""
         if self._face < other.face:
             return True
-        else:
-            return self._suit < other.suit
+
+        return self._suit < other.suit
 
     def __hash__(self):
         """Generate a unique integer representation of the card"""
@@ -160,7 +151,8 @@ class Card:
     def __str__(self):
         """Use the string representation of the card as the informal
         representation of the card"""
-        return Card.LOOKUP_FACE_CHAR[self._face] + Card.LOOKUP_SUIT_CHAR[self._suit]
+        return (Card.LOOKUP_FACE_CHAR[self._face]
+                + Card.LOOKUP_SUIT_CHAR[self._suit])
 
     def __repr__(self):
         """Get a string representing the card, using UTF-8 characters to
@@ -168,15 +160,18 @@ class Card:
         return str(self)
 
 
-@total_ordering #Only need to define __eq__ and __lt__ for all comparisons
+@total_ordering
 class Pile:
     """A Pile object, which represents an ordered list of cards of arbitrary
     length"""
 
-    def __init__(self, cards=[]):
+    def __init__(self, cards=None):
         """Initialise the pile by default as empty, or with a specified list
         of initial cards"""
-        self._cards = cards
+        if cards is None:
+            self._cards = []
+        else:
+            self._cards = cards
 
     @property
     def cards(self):
@@ -197,8 +192,8 @@ class Pile:
     def remove(self, card):
         """Remove a card from the Pile"""
         if card not in self._cards:
-            raise PileError("Cannot remove '{}' as it is not in the pile".format(
-                            card))
+            raise PileError(
+                    "Cannot remove '{}' as it is not in the pile".format(card))
         self._cards.remove(card)
 
     def peek(self, position=-1):
@@ -267,10 +262,6 @@ class Pile:
     def reverse(self):
         """Reverse the order of the Pile"""
         self._cards.reverse()
-
-    def sort(self):
-        """Sort the Pile into ascending order"""
-        self._cards.sort()
 
     def __add__(self, other):
         """Concatenate a pile to the end of the current pile"""
@@ -347,16 +338,13 @@ class Deck(Pile):
                 self._cards.append(Card(face, suit))
 
 
-
-if __name__=="__main__":
-    """Example usage:"""
-
+if __name__ == "__main__":
     import copy
 
-    #Test getting the typeable name of a card
+    # Test getting the typeable name of a card
     print(Card(Faces.SIX, Suits.SPADES).get_typeable_name())
 
-    #Test gettting a card form its typeable name
+    # Test gettting a card form its typeable name
     while True:
         inp = str(input("Enter the typeable name of a card: "))
         card = Card.get_from_typeable_name(inp)
@@ -364,7 +352,7 @@ if __name__=="__main__":
             break
     print(card)
 
-    #Test making Decks and Pile
+    # Test making Decks and Pile
     d1 = Deck()
     d2 = Pile([Card(Faces.ACE, Suits.DIAMONDS)])
     d3 = Pile([
@@ -372,9 +360,8 @@ if __name__=="__main__":
         Card(Faces.FIVE, Suits.CLUBS),
     ])
 
-    #Test operations on Decks and Piles
+    # Test operations on Decks and Piles
     print(dir(d1))
-    print(Card.__doc__(Card))
     print(d1)
     print(d2)
     print(d1 - d2)
@@ -382,6 +369,6 @@ if __name__=="__main__":
     print(d1 and d3)
     print(d1 is copy.deepcopy(d1))
 
-    #Test the hash functions of Pile objects
+    # Test the hash functions of Pile objects
     print(hash(d1))
     print(hash(d2))
