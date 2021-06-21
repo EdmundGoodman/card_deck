@@ -5,7 +5,7 @@
 Interface
 =========
 
-.. automodule:: card_deck
+.. automodule:: model
 
 
 Faces
