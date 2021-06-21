@@ -13,10 +13,10 @@ setup(
     long_description_content_type="text/markdown",
     author = 'Edmund Goodman',
     url = 'https://github.com/EdmundGoodman/card_deck',
-    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/v_01.tar.gz',        # I explain this later on
+    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.0.tar.gz',        # I explain this later on
     keywords = ['game', 'card', 'model'],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: MIT License',
