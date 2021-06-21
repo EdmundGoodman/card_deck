@@ -1,16 +1,21 @@
 from setuptools import setup
 
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name = 'card_deck',
     packages = ['card_deck'],
-    version = '1.0.5',
+    version = '1.0.0',
     license='MIT',
     description = 'An object model of a pack of cards',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author = 'Edmund Goodman',
     author_email = 'egoodman3141@gmail.com',
     url = 'https://github.com/EdmundGoodman/card_deck',
-    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.5.tar.gz',        # I explain this later on
+    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.0.tar.gz',        # I explain this later on
     keywords = ['game', 'card', 'model'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
