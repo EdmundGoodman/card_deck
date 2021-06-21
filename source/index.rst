@@ -6,10 +6,27 @@
 Welcome to card_deck's documentation!
 =====================================
 
+An object model of a pack of cards, written in Python, to streamline writing programs to model/play games involving cards
+
+Installation:
+
+.. code-block:: python
+
+    pip install deck-of-cards
+
+Requirements:
+
+There are no additional required libraries
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
+   usage
+   classes_methods
+   project
+   autodoc
 
 
 Indices and tables
