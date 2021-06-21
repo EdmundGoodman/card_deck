@@ -5,7 +5,7 @@
 Interface
 =========
 
-.. automodule:: assets
+.. automodule:: card_deck
 
 
 Faces
