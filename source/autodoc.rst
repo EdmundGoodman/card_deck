@@ -9,8 +9,6 @@ Auto Documentation
 
 
 
-:raw-html:`<br />`
-
 .. autoclass:: Faces
     :members:
     :private-members:
