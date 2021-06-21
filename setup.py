@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setup(
     name = 'card_deck',
     packages = ['card_deck'],
-    version = '1.0.2',
+    version = '1.0.3',
     license='MIT',
     description = 'An object model of a pack of cards',
     long_description=long_description,
@@ -14,7 +14,7 @@ setup(
     author = 'Edmund Goodman',
     author_email = 'egoodman3141@gmail.com',
     url = 'https://github.com/EdmundGoodman/card_deck',
-    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.2.tar.gz',        # I explain this later on
+    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.3.tar.gz',        # I explain this later on
     keywords = ['game', 'card', 'model'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
