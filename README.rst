@@ -40,6 +40,7 @@ Installation
 ------------
 
 .. code-block:: python
+
     pip install card-deck
 
 
