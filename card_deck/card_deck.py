@@ -30,10 +30,6 @@ class Suits(Enum):
     HEARTS = 3
     SPADES = 4
 
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return "An Enum object for the Suits of a card"
-
 
 @unique
 class Faces(Enum):
@@ -52,13 +48,16 @@ class Faces(Enum):
     QUEEN = 12
     KING = 13
 
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return "An Enum object for the Faces of a card"
 
 
 class CardError(Exception):
     pass
+
+
+class PileError(Exception):
+    pass
+
+
 
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Card:
@@ -168,14 +167,6 @@ class Card:
         prettily denote the suit"""
         return str(self)
 
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return """An immutable object representing a card, requires arguments
-which are instances of the Face and Suit enums"""
-
-
-class PileError(Exception):
-    pass
 
 @total_ordering #Only need to define __eq__ and __lt__ for all comparisons
 class Pile:
@@ -345,12 +336,6 @@ class Pile:
         of the string representations of the cards it holds"""
         return str(self)
 
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return """A mutable sequence of cards. If no argument is given the
-constructor creates an empty pile. The argument must be iterable if specified"""
-
-
 
 class Deck(Pile):
     """A Deck object, which is a Pile object that is initialised with
@@ -360,11 +345,6 @@ class Deck(Pile):
         for suit in Suits:
             for face in Faces:
                 self._cards.append(Card(face, suit))
-
-    def __doc__(self):
-        """Return a string summary of the class"""
-        return """A child of the Pile class, which is constructed containing
-all the cards in a single deck in order"""
 
 
 
