@@ -22,9 +22,8 @@ There are no additional required libraries
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   
+
    usage
-   classes_methods
    project
    autodoc
 

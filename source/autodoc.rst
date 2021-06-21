@@ -2,12 +2,14 @@
     :format: html
 
 
-Auto Documentation
-====================
+Interface
+=========
 
 .. automodule:: card_deck
 
 
+Faces
+-----
 
 .. autoclass:: Faces
     :members:
@@ -17,7 +19,8 @@ Auto Documentation
 
 
 
-:raw-html:`<br />`
+Suits
+-----
 
 .. autoclass:: Suits
     :members:
@@ -27,7 +30,8 @@ Auto Documentation
 
 
 
-:raw-html:`<br />`
+Card
+----
 
 .. autoclass:: Card
     :members:
@@ -37,7 +41,8 @@ Auto Documentation
 
 
 
-:raw-html:`<br />`
+Pile
+----
 
 .. autoclass:: Pile
     :members:
@@ -47,7 +52,8 @@ Auto Documentation
 
 
 
-:raw-html:`<br />`
+Deck
+----
 
 .. autoclass:: Deck
     :members:
@@ -59,7 +65,8 @@ Auto Documentation
 
 
 
-:raw-html:`<br />`
+Custom exceptions
+-----------------
 
 .. autoexception:: CardError
     :show-inheritance:
