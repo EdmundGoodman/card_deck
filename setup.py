@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name = 'card_deck',
-    version = '1.0.9',
+    version = '1.0.10',
     license='MIT',
     description = 'An object model of a pack of cards',
     long_description=long_description,
@@ -14,7 +14,7 @@ setup(
     author = 'Edmund Goodman',
     author_email = 'egoodman3141@gmail.com',
     url = 'https://github.com/EdmundGoodman/card_deck',
-    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.9.tar.gz',
+    download_url = 'https://github.com/EdmundGoodman/card_deck/archive/refs/tags/v1.0.10.tar.gz',
     packages=find_packages(),
     keywords = ['game', 'card', 'model'],
     classifiers=[
