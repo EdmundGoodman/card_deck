@@ -6,14 +6,13 @@ Importing the module
 
 .. code-block:: python
 
-    from card_deck import card_deck
+    from card_deck import *
 
 Creating and dealing from a deck of cards
 -----------------------------------------
 
 .. code-block:: python
 
-    from card_deck import *
     d = Deck()
     # Deal 5 cards from the deck into 3 different hands
     hands = d.deal(3,5)
