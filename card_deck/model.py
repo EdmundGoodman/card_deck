@@ -23,6 +23,7 @@ __email__ = "egoodman3141@gmail.com"
 
 
 @unique
+@total_ordering
 class Suits(Enum):
     """An Enum class for the suits in of a card"""
     DIAMONDS = 1
@@ -30,8 +31,13 @@ class Suits(Enum):
     HEARTS = 3
     SPADES = 4
 
+    def __lt__(self, other):
+        """Return the comparison of two faces based on their enumerated value"""
+        return self.value < other.value
+
 
 @unique
+@total_ordering
 class Faces(Enum):
     """An Enum class for the faces of a card"""
     ACE = 1
@@ -47,6 +53,10 @@ class Faces(Enum):
     JACK = 11
     QUEEN = 12
     KING = 13
+
+    def __lt__(self, other):
+        """Return the comparison of two faces based on their enumerated value"""
+        return self.value < other.value
 
 
 class CardError(Exception):
