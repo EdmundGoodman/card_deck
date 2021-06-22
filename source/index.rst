@@ -11,6 +11,8 @@ An object model of a pack of cards, written in Python, to streamline writing pro
 Installation
 ------------
 
+The library has been published on PyPi, so can be found here: [https://pypi.org/project/card-deck/](https://pypi.org/project/card-deck/), and and can be installed as follows:
+
 .. code-block:: python
 
     pip install card-deck
