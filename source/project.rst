@@ -11,7 +11,7 @@ Source Code
 The source code is available on GitHub:
 https://github.com/EdmundGoodman/cards
 
-Documentation
--------------
-The documentation is available on readthedocs:
-https://card-deck.readthedocs.io/en/latest/
+Download
+--------
+The library package can be downloaded from PyPi:
+https://pypi.org/project/card-deck/
