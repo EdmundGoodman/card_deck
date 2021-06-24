@@ -121,7 +121,7 @@ class Card:
             face_char, suit_char = typeable_name[0], typeable_name[1].upper()
             face, suit = None, None
         else:
-            return None
+            raise CardError("Cannot build card from string not of length 2")
 
         if face_char in Card.LOOKUP_FACE_TYPEABLE:
             face = Card.LOOKUP_FACE_TYPEABLE[face_char]
@@ -151,8 +151,10 @@ class Card:
         by comparing faces, then if they are equal by comparing suits"""
         if self._face < other.face:
             return True
-
-        return self._suit < other.suit
+        elif self.face > other.face:
+            return False
+        else:
+            return self._suit < other.suit
 
     def __hash__(self):
         """Generate a unique integer representation of the card"""
@@ -267,7 +269,7 @@ class Pile:
 
     def extend(self, other):
         """Extend the pile contents by another pile"""
-        self._cards = self.cards + other.cards
+        self._cards.extend(other.cards)
 
     def reverse(self):
         """Reverse the order of the Pile"""
@@ -343,6 +345,6 @@ class Deck(Pile):
     every permutation of suit and face, initially ordered by the enum values"""
     def __init__(self):
         Pile.__init__(self)
-        for suit in Suits:
-            for face in Faces:
+        for face in Faces:
+            for suit in Suits:
                 self._cards.append(Card(face, suit))
