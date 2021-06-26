@@ -8,8 +8,8 @@ Interface
 .. automodule:: model
 
 
-Faces
------
+Faces enum
+----------
 
 .. autoclass:: Faces
     :members:
@@ -19,8 +19,8 @@ Faces
 
 
 
-Suits
------
+Suits enum
+----------
 
 .. autoclass:: Suits
     :members:
@@ -30,8 +30,8 @@ Suits
 
 
 
-Card
-----
+Card object
+-----------
 
 .. autoclass:: Card
     :members:
@@ -41,8 +41,8 @@ Card
 
 
 
-Pile
-----
+Pile object
+-----------
 
 .. autoclass:: Pile
     :members:
@@ -52,8 +52,8 @@ Pile
 
 
 
-Deck
-----
+Deck object
+-----------
 
 .. autoclass:: Deck
     :members:
