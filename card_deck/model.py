@@ -117,20 +117,25 @@ class Card:
         the suit, as the first letter of the suit name.
         For example, the ace of hearts would be 'AH', whereas the five of clubs
         would be '5C'"""
-        if len(typeable_name) != 2:
-            raise CardError("Cannot build card from string not of length 2")
+        #Accout for the fact that 10 has two characters in
+        if len(typeable_name) == 2:
+            face, suit = typeable_name[0], typeable_name[1]
+        elif len(typeable_name) == 3:
+            face, suit = typeable_name[:2], typeable_name[2]
+        else:
+            raise CardError("Cannot build card from incorrect string length")
 
         return Card(
-            Card.get_face_from_typeable_name(typeable_name[0]),
-            Card.get_suit_from_typeable_name(typeable_name[1])
+            Card.get_face_from_typeable_name(face),
+            Card.get_suit_from_typeable_name(suit)
         )
 
     @staticmethod
     def get_face_from_typeable_name(typeable_name):
         """Return the Face enum specified by the typeable name"""
-        if len(typeable_name) != 1:
-            raise CardError("Cannot build face from string not of length 1")
-        elif typeable_name not in Card.LOOKUP_FACE_TYPEABLE:
+        if len(typeable_name) != 1 and len(typeable_name) != 2:
+            raise CardError("Cannot build face from incorrect string length")
+        elif typeable_name.upper() not in Card.LOOKUP_FACE_TYPEABLE:
             raise CardError("Cannot build from invalid face: '{}'".format(
                             typeable_name))
         return Card.LOOKUP_FACE_TYPEABLE[typeable_name.upper()]
@@ -140,7 +145,7 @@ class Card:
         """Return the Suit enum specified by the typeable name"""
         if len(typeable_name) != 1:
             raise CardError("Cannot build suit from string not of length 1")
-        elif typeable_name not in Card.LOOKUP_SUIT_TYPEABLE:
+        elif typeable_name.upper() not in Card.LOOKUP_SUIT_TYPEABLE:
             raise CardError("Cannot build from invalid suit: '{}'".format(
                             typeable_name))
         return Card.LOOKUP_SUIT_TYPEABLE[typeable_name.upper()]

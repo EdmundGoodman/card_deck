@@ -24,9 +24,12 @@ class TestCard(unittest.TestCase):
     def test_get_from_typeable_name(self):
         """Test that a card can be built from a typeable name"""
         c = Card.get_from_typeable_name("5C")
+        d = Card.get_from_typeable_name("10h")
         self.assertIsInstance(c, Card)
         self.assertEqual(c.face, Faces.FIVE)
         self.assertEqual(c.suit, Suits.CLUBS)
+        self.assertEqual(d.face, Faces.TEN)
+        self.assertEqual(d.suit, Suits.HEARTS)
 
         with self.assertRaises(CardError):
             Card.get_from_typeable_name("5B")
