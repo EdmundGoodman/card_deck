@@ -6,7 +6,7 @@ Tests for the library
 """
 
 import unittest
-from model import Faces, Suits, Deck, Pile, Card, CardError, PileError
+from .model import Faces, Suits, Deck, Pile, Card, CardError, PileError
 from copy import deepcopy
 
 class TestCard(unittest.TestCase):
