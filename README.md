@@ -22,3 +22,8 @@ Requirements
 ------------
 
 There are no additional required libraries
+
+License
+-------
+
+Copyright Edmund Goodman 2021 under the MIT license
